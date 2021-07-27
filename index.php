@@ -14,8 +14,8 @@
         <div id='playfield'>
             <div id="zoom">
                 <script>
-                    var height = 10;
-                    var width = 6 ;
+                    var height = 5;
+                    var width = 5 ;
                     for(i=0; i<height; i++){
                         document.write('<div id="block">');
                         for(a=0; a<width; a++){
@@ -32,7 +32,7 @@
 
         <div class="choice">
             <script>
-                for(i=0; i<6; i++){
+                for(i=0; i<3; i++){
                     var choices = 6;
                     var a = Math.floor(Math.random()*choices)*1;
                     document.write("<div id='"+ a +"' class='tile' draggable='true' style='background-image:url(tiles/alpha0/tile_" + a + ".png);'></div>");

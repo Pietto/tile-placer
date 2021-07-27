@@ -53,6 +53,7 @@ var p = document.getElementsByClassName('tile');
 var choice = document.getElementsByClassName('choice');
 var dragItem = null;
 var dragItem_id;
+var abort;
 
 for (var i of p) {
     i.addEventListener('dragstart', dragStart);
@@ -66,6 +67,7 @@ function dragStart() {
 }
 
 function dragEnd() {
+    abort = false;
     dragItem = null;
     setTimeout(() => this.style.display = "block", 0);
 }
@@ -77,10 +79,13 @@ for (j of choice) {
     j.addEventListener('drop', Drop);
 }
 function Drop() {
-    checkCompatibility(this.id, dragItem_id);    
-    this.append(dragItem);
-    console.log();
-    updateDataSet(this.id, this.firstChild.id);
+    checkCompatibility(this.id, dragItem_id);
+    if(abort == true){
+        dragEnd();
+    }else{
+        this.append(dragItem);
+        updateDataSet(this.id, this.firstChild.id);
+    }
 }
 function dragOver(e) {
     e.preventDefault();
@@ -120,14 +125,62 @@ function updateDataSet(location_id, tile_id){
 
 function checkCompatibility(id, tile_id){
     var left_id = id-1;
-    if(tiles[left_id].right == null){
+    var right_id = parseInt(id)+1;
+    var top_id = id-width;
+    var bottom_id = parseInt(id)+ parseInt(width);
+    //check left tile
+    if(left_id < 0){
+        console.log('left tile pos doesn\'t exist');
+    }else if(tiles[left_id].right == null){
         console.log('left is empty');
     }else{
         if(tiles[left_id].right == tileData[tile_id].left){
-            console.log('compatible!');
+            console.log('left compatible!');
         }else{
-            console.log('uncompatible!');
+            console.log('left uncompatible!');
+            abort = true;
         }
+    }
 
+    //check right tile
+    if(right_id >= totalTiles){
+        console.log('right tile pos doesn\'t exist');
+    }else if(tiles[right_id].left == null){
+        console.log('right is empty');
+    }else{
+        if(tiles[right_id].left == tileData[tile_id].right){
+            console.log('right compatible!');
+        }else{
+            console.log('right uncompatible!');
+            abort = true;
+        }
+    }
+
+    //check top tile
+    if(top_id < 0){
+        console.log('top tile pos doesn\'t exist');
+    }else if(tiles[top_id].bottom == null){
+        console.log('top is empty');
+    }else{
+        if(tiles[top_id].bottom == tileData[tile_id].top){
+            console.log('top compatible!');
+        }else{
+            console.log('top uncompatible!');
+            abort = true;
+        }
+    }
+
+    //check bottom tile
+    if(bottom_id > totalTiles){
+        console.log('bottom tile pos doesn\'t exist');
+    }else if(tiles[bottom_id].top == null){
+        console.log('bottom is empty');
+    }else{
+        if(tiles[bottom_id].top == tileData[tile_id].bottom){
+            console.log('bottom compatible!');
+        }else{
+            console.log('bottom uncompatible!');
+            abort = true;
+        }
     }
 }
