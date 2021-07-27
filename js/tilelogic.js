@@ -52,6 +52,7 @@ zoom.onwheel = function (e) {
 var p = document.getElementsByClassName('tile');
 var choice = document.getElementsByClassName('choice');
 var dragItem = null;
+var dragItem_id;
 
 for (var i of p) {
     i.addEventListener('dragstart', dragStart);
@@ -61,6 +62,7 @@ for (var i of p) {
 function dragStart() {
     dragItem = this;
     setTimeout(() => this.style.display = "none", 0);
+    dragItem_id = this.id;
 }
 
 function dragEnd() {
@@ -75,6 +77,7 @@ for (j of choice) {
     j.addEventListener('drop', Drop);
 }
 function Drop() {
+    checkCompatibility(this.id, dragItem_id);    
     this.append(dragItem);
     console.log();
     updateDataSet(this.id, this.firstChild.id);
@@ -108,5 +111,23 @@ for(i=0; i<totalTiles; i++){
 
 function updateDataSet(location_id, tile_id){
     Object.assign(tiles, {[location_id]:{tile: tile_id, top: tileData[tile_id].top, left: tileData[tile_id].left, bottom: tileData[tile_id].bottom, right: tileData[tile_id].right}});
-    console.log(tiles);
+}
+
+
+
+
+
+
+function checkCompatibility(id, tile_id){
+    var left_id = id-1;
+    if(tiles[left_id].right == null){
+        console.log('left is empty');
+    }else{
+        if(tiles[left_id].right == tileData[tile_id].left){
+            console.log('compatible!');
+        }else{
+            console.log('uncompatible!');
+        }
+
+    }
 }

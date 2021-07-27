@@ -14,8 +14,8 @@
         <div id='playfield'>
             <div id="zoom">
                 <script>
-                    var height = 5;
-                    var width = 5 ;
+                    var height = 10;
+                    var width = 6 ;
                     for(i=0; i<height; i++){
                         document.write('<div id="block">');
                         for(a=0; a<width; a++){
@@ -31,7 +31,6 @@
         </div>
 
         <div class="choice">
-                
             <script>
                 for(i=0; i<6; i++){
                     var choices = 6;
