@@ -124,16 +124,18 @@ function updateDataSet(location_id, tile_id){
 
 
 function checkCompatibility(id, tile_id){
-    var left_id = id-1;
-    var right_id = parseInt(id)+1;
-    var top_id = id-width;
-    var bottom_id = parseInt(id)+ parseInt(width);
+    var left_id = id-1,
+        right_id = parseInt(id)+1,
+        top_id = id-width,
+        bottom_id = parseInt(id)+ parseInt(width),
+        adjacentTiles = false;
     //check left tile
     if(left_id < 0){
         console.log('left tile pos doesn\'t exist');
     }else if(tiles[left_id].right == null){
         console.log('left is empty');
     }else{
+        adjacentTiles = true;
         if(tiles[left_id].right == tileData[tile_id].left){
             console.log('left compatible!');
         }else{
@@ -148,6 +150,7 @@ function checkCompatibility(id, tile_id){
     }else if(tiles[right_id].left == null){
         console.log('right is empty');
     }else{
+        adjacentTiles = true;
         if(tiles[right_id].left == tileData[tile_id].right){
             console.log('right compatible!');
         }else{
@@ -162,6 +165,7 @@ function checkCompatibility(id, tile_id){
     }else if(tiles[top_id].bottom == null){
         console.log('top is empty');
     }else{
+        adjacentTiles = true;
         if(tiles[top_id].bottom == tileData[tile_id].top){
             console.log('top compatible!');
         }else{
@@ -176,11 +180,15 @@ function checkCompatibility(id, tile_id){
     }else if(tiles[bottom_id].top == null){
         console.log('bottom is empty');
     }else{
+        adjacentTiles = true;
         if(tiles[bottom_id].top == tileData[tile_id].bottom){
             console.log('bottom compatible!');
         }else{
             console.log('bottom uncompatible!');
             abort = true;
         }
+    }
+    if(adjacentTiles == false){
+        abort = true;
     }
 }
