@@ -14,12 +14,13 @@
         <div id='playfield'>
             <div id="zoom">
                 <script>
-                    var height = 5;
-                    var width = 5 ;
+                    // height and width work best with odd numbers, due to the placement of the starting tile
+                    var height = 3;
+                    var width = 3;
                     for(i=0; i<height; i++){
                         document.write('<div id="block">');
                         for(a=0; a<width; a++){
-                            count = i*5;
+                            count = i*width;
                             count = count + a;
                             document.write('<div id="'+ count +'" class="choice"></div>');
                         }

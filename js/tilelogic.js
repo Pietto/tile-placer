@@ -83,9 +83,10 @@ for (j of choice) {
 function Drop() {
     checkCompatibility(this.id, dragItem_id);
     if(abort == true){
-        dragEnd();
+        // dragEnd();
+        this.append(dragItem);
+        updateDataSet(this.id, this.firstChild.id);
     }else{
-        
         this.append(dragItem);
         updateDataSet(this.id, this.firstChild.id);
     }
@@ -198,7 +199,7 @@ function checkCompatibility(id, tile_id){
     }
 
     //check bottom tile
-    if(bottom_id > totalTiles){
+    if(bottom_id >= totalTiles){
         console.log('bottom tile pos doesn\'t exist');
     }else if(tiles[bottom_id].top == null){
         console.log('bottom is empty');
