@@ -1,3 +1,5 @@
+    var totalTiles = height*width;
+
 // playfield zoom/move logic
 
 var scale = 1,
@@ -83,6 +85,7 @@ function Drop() {
     if(abort == true){
         dragEnd();
     }else{
+        
         this.append(dragItem);
         updateDataSet(this.id, this.firstChild.id);
     }
@@ -103,18 +106,37 @@ function dragLeave() {
 
 
 
+//filling middle position with defaut tile (visual)
+//actual value will be given at #1
+middleTileNumber = Math.floor(totalTiles/2);
+var middleTile = document.getElementById(middleTileNumber);
+var defaultTile = document.getElementById('tile_0');
+middleTile.append(defaultTile);
+
+//shorter documentation of 3 lines above
+document.getElementById(Math.floor(totalTiles/2)).append(document.getElementById('tile_0'));
+
+
+
 
 // creating the dataset for all the tiles
-
 var tileData = [{top: 'green', right: 'white', bottom: 'red', left: 'green'},{top: 'green', right: 'white', bottom: 'red', left: 'white'},{top: 'green', right: 'white', bottom: 'white', left: 'red'},{top: 'green', right: 'white', bottom: 'red', left: 'red'},{top: 'white', right: 'red', bottom: 'red', left: 'red'},{top: 'white', right: 'green', bottom: 'green', left: 'red'}]
 
-var totalTiles = height*width;
 var tiles = {};
 for(i=0; i<totalTiles; i++){
-    Object.assign(tiles, {[i]:{tile: 1, top: null, right: null, bottom: null, right: null}});
+    Object.assign(tiles, {[i]:{tile: null, top: null, right: null, bottom: null, right: null}});
 }
 
+
+//giving middle position of grid an actual value (#1)
+Object.assign(tiles, {[12]:{tile: 1, top: 'green', right: 'white', bottom: 'red', left: 'green'}}); //change 12 to middletilenumber later
+
+
+
+
+
 function updateDataSet(location_id, tile_id){
+    tile_id = tile_id.replace(/\D/g,'');
     Object.assign(tiles, {[location_id]:{tile: tile_id, top: tileData[tile_id].top, left: tileData[tile_id].left, bottom: tileData[tile_id].bottom, right: tileData[tile_id].right}});
 }
 
@@ -122,12 +144,13 @@ function updateDataSet(location_id, tile_id){
 
 
 
-
+//checks whether tile is allowed to be placed on the dropped location
 function checkCompatibility(id, tile_id){
     var left_id = id-1,
         right_id = parseInt(id)+1,
         top_id = id-width,
         bottom_id = parseInt(id)+ parseInt(width),
+        tile_id = tile_id.replace(/\D/g,'');
         adjacentTiles = false;
     //check left tile
     if(left_id < 0){
