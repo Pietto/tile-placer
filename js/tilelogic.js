@@ -1,4 +1,5 @@
-    var totalTiles = height*width;
+var totalTiles = height*width,
+    currentRotation = 0;
 
 // playfield zoom/move logic
 
@@ -51,7 +52,7 @@ zoom.onwheel = function (e) {
 
 // logic for dragging 'n dropping of the tiles
 
-var p = document.getElementsByClassName('tile');
+var p = document.getElementsByClassName('unplacedTile');
 var choice = document.getElementsByClassName('choice');
 var dragItem = null;
 var dragItem_id;
@@ -80,29 +81,31 @@ for (j of choice) {
     j.addEventListener('dragleave', dragLeave);
     j.addEventListener('drop', Drop);
 }
+
 function Drop() {
     checkCompatibility(this.id, dragItem_id);
     if(abort == true){
-        // dragEnd();
-        this.append(dragItem);
-        updateDataSet(this.id, this.firstChild.id);
+        dragEnd();
+        console.log('dragend '+ dragItem_id);
     }else{
+        document.getElementsByClassName('unplacedTile')[0].className = "tile";
         this.append(dragItem);
         updateDataSet(this.id, this.firstChild.id);
     }
 }
+
 function dragOver(e) {
     e.preventDefault();
     // this.style.border = "2px dotted cyan";
 }
+
 function dragEnter(e) {
     e.preventDefault();
 }
+
 function dragLeave() {
     // this.style.border = "none";
 }
-
-
 
 
 
@@ -125,7 +128,7 @@ var tileData = [{top: 'green', right: 'white', bottom: 'red', left: 'green'},{to
 
 var tiles = {};
 for(i=0; i<totalTiles; i++){
-    Object.assign(tiles, {[i]:{tile: null, top: null, right: null, bottom: null, right: null}});
+    Object.assign(tiles, {[i]:{tile: null, top: null, right: null, bottom: null, right: null, rotation: 0}});
 }
 
 
@@ -137,8 +140,43 @@ Object.assign(tiles, {[12]:{tile: 1, top: 'green', right: 'white', bottom: 'red'
 
 
 function updateDataSet(location_id, tile_id){
+    console.log(currentRotation);
     tile_id = tile_id.replace(/\D/g,'');
-    Object.assign(tiles, {[location_id]:{tile: tile_id, top: tileData[tile_id].top, left: tileData[tile_id].left, bottom: tileData[tile_id].bottom, right: tileData[tile_id].right}});
+
+    var oldTop = tileData[tile_id].top,
+        oldRight = tileData[tile_id].right,
+        oldBottom = tileData[tile_id].bottom,
+        oldLeft = tileData[tile_id].left;
+    //changing values for rotated tiles
+    if(currentRotation == 0 || currentRotation == 360){
+        var newTop = oldTop,
+            newRight = oldRight,
+            newBottom = oldBottom,
+            newLeft = oldLeft;
+    }else if(currentRotation == 270){
+        var newTop = oldRight,
+            newRight = oldBottom,
+            newBottom = oldLeft,
+            newLeft = oldTop;
+    }else if(currentRotation == 180){
+        var newTop = oldBottom,
+            newRight = oldLeft,
+            newBottom = oldTop,
+            newLeft = oldRight;
+    }else if(currentRotation == 90){
+        var newTop = oldLeft,
+            newRight = oldTop,
+            newBottom = oldRight,
+            newLeft = oldBottom;
+    }
+    Object.assign(tiles, {[location_id]:{tile: tile_id, top: newTop, left: newLeft, bottom: newBottom, right: newRight}});
+    console.log(tiles)
+
+    console.log(tile_id);  
+
+    var parent = document.getElementById('zoom'),
+        childDiv = parent.getElementsByTagName('div')[0],
+        requiredDiv = childDiv.getElementsByTagName('div')[1];
 }
 
 
@@ -153,6 +191,7 @@ function checkCompatibility(id, tile_id){
         bottom_id = parseInt(id)+ parseInt(width),
         tile_id = tile_id.replace(/\D/g,'');
         adjacentTiles = false;
+    
     //check left tile
     if(left_id < 0){
         console.log('left tile pos doesn\'t exist');
@@ -160,13 +199,37 @@ function checkCompatibility(id, tile_id){
         console.log('left is empty');
     }else{
         adjacentTiles = true;
-        if(tiles[left_id].right == tileData[tile_id].left){
-            console.log('left compatible!');
-        }else{
-            console.log('left uncompatible!');
-            abort = true;
+        if(currentRotation == 0 || currentRotation == 360){
+            if(tiles[left_id].right == tileData[tile_id].left){
+                console.log('left compatible!');
+            }else{
+                console.log('left uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 90){
+            if(tiles[left_id].right == tileData[tile_id].bottom){
+                console.log('left compatible!');
+            }else{
+                console.log('left uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 180){
+            if(tiles[left_id].right == tileData[tile_id].rigth){
+                console.log('left compatible!');
+            }else{
+                console.log('left uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 270){
+            if(tiles[left_id].right == tileData[tile_id].top){
+                console.log('left compatible!');
+            }else{
+                console.log('left uncompatible!');
+                abort = true;
+            }
         }
     }
+        
 
     //check right tile
     if(right_id >= totalTiles){
@@ -175,12 +238,36 @@ function checkCompatibility(id, tile_id){
         console.log('right is empty');
     }else{
         adjacentTiles = true;
-        if(tiles[right_id].left == tileData[tile_id].right){
-            console.log('right compatible!');
-        }else{
-            console.log('right uncompatible!');
-            abort = true;
+        if(currentRotation == 0 || currentRotation == 360){
+            if(tiles[right_id].left == tileData[tile_id].right){
+                console.log('right compatible!');
+            }else{
+                console.log('right uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 90){
+            if(tiles[right_id].left == tileData[tile_id].top){
+                console.log('right compatible!');
+            }else{
+                console.log('right uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 180){
+            if(tiles[right_id].left == tileData[tile_id].left){
+                console.log('right compatible!');
+            }else{
+                console.log('right uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 270){
+            if(tiles[right_id].left == tileData[tile_id].bottom){
+                console.log('right compatible!');
+            }else{
+                console.log('right uncompatible!');
+                abort = true;
+            }
         }
+        
     }
 
     //check top tile
@@ -190,12 +277,36 @@ function checkCompatibility(id, tile_id){
         console.log('top is empty');
     }else{
         adjacentTiles = true;
-        if(tiles[top_id].bottom == tileData[tile_id].top){
-            console.log('top compatible!');
-        }else{
-            console.log('top uncompatible!');
-            abort = true;
+        if(currentRotation == 0 || currentRotation == 360){
+            if(tiles[top_id].bottom == tileData[tile_id].top){
+                console.log('top compatible!');
+            }else{
+                console.log('top uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 90){
+            if(tiles[top_id].bottom == tileData[tile_id].left){
+                console.log('top compatible!');
+            }else{
+                console.log('top uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 180){
+            if(tiles[top_id].bottom == tileData[tile_id].bottom){
+                console.log('top compatible!');
+            }else{
+                console.log('top uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 270){
+            if(tiles[top_id].bottom == tileData[tile_id].right){
+                console.log('top compatible!');
+            }else{
+                console.log('top uncompatible!');
+                abort = true;
+            }
         }
+        
     }
 
     //check bottom tile
@@ -205,14 +316,68 @@ function checkCompatibility(id, tile_id){
         console.log('bottom is empty');
     }else{
         adjacentTiles = true;
-        if(tiles[bottom_id].top == tileData[tile_id].bottom){
-            console.log('bottom compatible!');
-        }else{
-            console.log('bottom uncompatible!');
-            abort = true;
+        if(currentRotation == 360 || currentRotation == 0){
+            if(tiles[bottom_id].top == tileData[tile_id].bottom){
+                console.log('bottom compatible!');
+            }else{
+                console.log('bottom uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 90){
+            if(tiles[bottom_id].top == tileData[tile_id].right){
+                console.log('bottom compatible!');
+            }else{
+                console.log('bottom uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 180){
+            if(tiles[bottom_id].top == tileData[tile_id].top){
+                console.log('bottom compatible!');
+            }else{
+                console.log('bottom uncompatible!');
+                abort = true;
+            }
+        }else if(currentRotation == 270){
+            if(tiles[bottom_id].top == tileData[tile_id].left){
+                console.log('bottom compatible!');
+            }else{
+                console.log('bottom uncompatible!');
+                abort = true;
+            }
         }
     }
     if(adjacentTiles == false){
         abort = true;
+    }
+}
+
+
+//logic for rotating a tile
+
+window.onkeypress = function(event){
+    console.log('key: '+event.keyCode);
+    if(event.keyCode == 91){
+        rotateTile('left');
+    }else if(event.keyCode == 93){
+        rotateTile('right');
+    }
+}
+
+function rotateTile(rotation){
+    var ele = document.getElementsByClassName('unplacedTile');
+    if(rotation == 'right'){
+        currentRotation = currentRotation+90;
+    }else if(rotation == 'left'){
+        currentRotation = currentRotation-90;
+    }
+
+    if(currentRotation > 360){
+        currentRotation = 90;
+    }else if(currentRotation < 0){
+        currentRotation = 270;
+    }
+    //visually rotating unplaced tile(s)
+    for (var i = 0; i < ele.length; i++ ) {
+        ele[i].style.webkitTransform = "rotate("+ currentRotation+ "deg)";
     }
 }

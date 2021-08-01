@@ -15,10 +15,10 @@
             <div id="zoom">
                 <script>
                     // height and width work best with odd numbers, due to the placement of the starting tile
-                    var height = 3;
-                    var width = 3;
+                    var height = 5;
+                    var width = 5;
                     for(i=0; i<height; i++){
-                        document.write('<div id="block">');
+                        document.write('<div class="block">');
                         for(a=0; a<width; a++){
                             count = i*width;
                             count = count + a;
@@ -32,14 +32,14 @@
         </div>
 
         <div class="choice">
-                <!-- defaulttile -->
+                <!-- default tile -->
                 <div id='tile_0' class='tile' draggable='true' style='background-image:url(tiles/alpha0/tile_0.png);'></div>
             <script>
                 var tiles = 10;
                 for(i=0; i<10; i++){
                     var choices = 6;
                     var a = Math.floor(Math.random()*choices)*1;
-                    document.write("<div id='tile_"+ a +"' class='tile' draggable='true' style='background-image:url(tiles/alpha0/tile_" + a + ".png);'></div>");
+                    document.write("<div id='tile_"+ a +"' class='unplacedTile' draggable='true' style='background-image:url(tiles/alpha0/tile_" + a + ".png);'></div>");
                 }
             </script>
         </div>

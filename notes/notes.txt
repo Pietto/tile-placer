@@ -1,0 +1,6 @@
+check whether cell is on the outter cell of the grid
+
+left = divisible by width
+top <width
+bottom > [totaltiles-width]
+right = left + width

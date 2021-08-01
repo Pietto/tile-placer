@@ -38,6 +38,15 @@ section{
     width: 100px;
     height: 100px;
     background-size: cover;
+    transition: .4s;
+    /* -webkit-transform: rotate(90deg); */
+}
+
+.unplacedTile{
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    transition: .4s;
 }
 
 .zoom{
@@ -55,6 +64,6 @@ section{
     height: 100;
 }
 
-#block{
+.block{
     display: block;
 }
