@@ -123,7 +123,7 @@ document.getElementById(Math.floor(totalTiles/2)).append(document.getElementById
 
 
 // creating the dataset for all the tiles
-var tileData = [{top: 'green', right: 'white', bottom: 'red', left: 'green'},{top: 'green', right: 'white', bottom: 'red', left: 'white'},{top: 'green', right: 'white', bottom: 'white', left: 'red'},{top: 'green', right: 'white', bottom: 'red', left: 'red'},{top: 'white', right: 'red', bottom: 'red', left: 'red'},{top: 'white', right: 'green', bottom: 'green', left: 'red'}]
+var tileData = [{top: 'grass', right: 'road', bottom: 'castle', left: 'grass'},{top: 'grass', right: 'road', bottom: 'castle', left: 'road'},{top: 'grass', right: 'road', bottom: 'road', left: 'castle'},{top: 'grass', right: 'road', bottom: 'castle', left: 'castle'},{top: 'road', right: 'castle', bottom: 'castle', left: 'castle'},{top: 'road', right: 'grass', bottom: 'grass', left: 'castle'}]
 
 var tiles = {};
 for(i=0; i<totalTiles; i++){
@@ -132,7 +132,7 @@ for(i=0; i<totalTiles; i++){
 
 
 //giving middle position of grid an actual value (#1)
-Object.assign(tiles, {[middleTileNumber]:{tile: 1, top: 'green', right: 'white', bottom: 'red', left: 'green'}}); //change 12 to middletilenumber later
+Object.assign(tiles, {[middleTileNumber]:{tile: 1, top: 'grass', right: 'road', bottom: 'castle', left: 'grass'}}); //change 12 to middletilenumber later
 
 
 
@@ -190,11 +190,14 @@ function checkCompatibility(id, tile_id){
         dontCheckLeft = false;
     if(id < width){
         dontCheckTop = true;
-    }else if(id % width === 0){
+    }
+    if(id % width === 0){
         dontCheckLeft = true;
-    }else if([+id + +1] % width === 0){
+    }
+    if([+id + +1] % width === 0){
         dontCheckRight == true;
-    }else if(id > [totalTiles-width]){
+    }
+    if(id > [totalTiles-width]){
         dontCheckBottom = true;
     }
     
