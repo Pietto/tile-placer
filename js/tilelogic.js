@@ -86,7 +86,6 @@ function Drop() {
     checkCompatibility(this.id, dragItem_id);
     if(abort == true){
         dragEnd();
-        console.log('dragend '+ dragItem_id);
     }else{
         document.getElementsByClassName('unplacedTile')[0].className = "tile";
         this.append(dragItem);
@@ -133,7 +132,7 @@ for(i=0; i<totalTiles; i++){
 
 
 //giving middle position of grid an actual value (#1)
-Object.assign(tiles, {[12]:{tile: 1, top: 'green', right: 'white', bottom: 'red', left: 'green'}}); //change 12 to middletilenumber later
+Object.assign(tiles, {[middleTileNumber]:{tile: 1, top: 'green', right: 'white', bottom: 'red', left: 'green'}}); //change 12 to middletilenumber later
 
 
 
@@ -170,13 +169,6 @@ function updateDataSet(location_id, tile_id){
             newLeft = oldBottom;
     }
     Object.assign(tiles, {[location_id]:{tile: tile_id, top: newTop, left: newLeft, bottom: newBottom, right: newRight}});
-    console.log(tiles)
-
-    console.log(tile_id);  
-
-    var parent = document.getElementById('zoom'),
-        childDiv = parent.getElementsByTagName('div')[0],
-        requiredDiv = childDiv.getElementsByTagName('div')[1];
 }
 
 
@@ -191,13 +183,27 @@ function checkCompatibility(id, tile_id){
         bottom_id = parseInt(id)+ parseInt(width),
         tile_id = tile_id.replace(/\D/g,'');
         adjacentTiles = false;
+
+    var dontCheckTop = false,
+        dontCheckRight = false,
+        dontCheckBottom = false,
+        dontCheckLeft = false;
+    if(id < width){
+        dontCheckTop = true;
+    }else if(id % width === 0){
+        dontCheckLeft = true;
+    }else if([+id + +1] % width === 0){
+        dontCheckRight == true;
+    }else if(id > [totalTiles-width]){
+        dontCheckBottom = true;
+    }
     
     //check left tile
     if(left_id < 0){
         console.log('left tile pos doesn\'t exist');
     }else if(tiles[left_id].right == null){
         console.log('left is empty');
-    }else{
+    }else if(dontCheckLeft == false){
         adjacentTiles = true;
         if(currentRotation == 0 || currentRotation == 360){
             if(tiles[left_id].right == tileData[tile_id].left){
@@ -214,7 +220,7 @@ function checkCompatibility(id, tile_id){
                 abort = true;
             }
         }else if(currentRotation == 180){
-            if(tiles[left_id].right == tileData[tile_id].rigth){
+            if(tiles[left_id].right == tileData[tile_id].right){
                 console.log('left compatible!');
             }else{
                 console.log('left uncompatible!');
@@ -228,6 +234,8 @@ function checkCompatibility(id, tile_id){
                 abort = true;
             }
         }
+    }else{
+        console.log('dontCheckLeft == '+dontCheckLeft);
     }
         
 
@@ -236,7 +244,7 @@ function checkCompatibility(id, tile_id){
         console.log('right tile pos doesn\'t exist');
     }else if(tiles[right_id].left == null){
         console.log('right is empty');
-    }else{
+    }else if(dontCheckRight == false){
         adjacentTiles = true;
         if(currentRotation == 0 || currentRotation == 360){
             if(tiles[right_id].left == tileData[tile_id].right){
@@ -267,7 +275,8 @@ function checkCompatibility(id, tile_id){
                 abort = true;
             }
         }
-        
+    }else{
+        console.log('dontCheckRight == '+dontCheckRight);
     }
 
     //check top tile
@@ -275,7 +284,7 @@ function checkCompatibility(id, tile_id){
         console.log('top tile pos doesn\'t exist');
     }else if(tiles[top_id].bottom == null){
         console.log('top is empty');
-    }else{
+    }else if(dontCheckTop == false){
         adjacentTiles = true;
         if(currentRotation == 0 || currentRotation == 360){
             if(tiles[top_id].bottom == tileData[tile_id].top){
@@ -306,7 +315,8 @@ function checkCompatibility(id, tile_id){
                 abort = true;
             }
         }
-        
+    }else{
+        console.log('dontCheckTop == '+dontCheckTop);
     }
 
     //check bottom tile
@@ -314,7 +324,7 @@ function checkCompatibility(id, tile_id){
         console.log('bottom tile pos doesn\'t exist');
     }else if(tiles[bottom_id].top == null){
         console.log('bottom is empty');
-    }else{
+    }else if(dontCheckBottom == false){
         adjacentTiles = true;
         if(currentRotation == 360 || currentRotation == 0){
             if(tiles[bottom_id].top == tileData[tile_id].bottom){
@@ -345,7 +355,10 @@ function checkCompatibility(id, tile_id){
                 abort = true;
             }
         }
+    }else{
+        console.log('dontCheckBottom == '+dontCheckBottom);
     }
+
     if(adjacentTiles == false){
         abort = true;
     }
