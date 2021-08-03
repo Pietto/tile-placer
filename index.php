@@ -35,8 +35,9 @@
                 <!-- default tile -->
                 <div id='tile_0' class='tile' draggable='true' style='background-image:url(tiles/alpha0/tile_0.png);'></div>
             <script>
-                var tiles = 10;
-                for(i=0; i<10; i++){
+                var tiles = 25;
+                tiles = +tiles -2;
+                for(i=0; i<=tiles; i++){
                     var choices = 6;
                     var a = Math.floor(Math.random()*choices)*1;
                     document.write("<div id='tile_"+ a +"' class='unplacedTile' draggable='true' style='background-image:url(tiles/alpha0/tile_" + a + ".png);'></div>");
