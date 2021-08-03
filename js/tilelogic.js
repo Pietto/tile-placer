@@ -197,8 +197,14 @@ function checkCompatibility(id, tile_id){
     if([+id + +1] % width === 0){
         dontCheckRight == true;
     }
-    if(id > [totalTiles-width]){
+    if(Number(id) > Number([totalTiles-width])){
         dontCheckBottom = true;
+        console.log('dontcheckbottom == ' + dontCheckBottom);
+        console.log('id'+ id);
+        console.log('totalTiles'+ totalTiles);
+        console.log('width'+ width)
+        console.log('[totalTiles-width]'+ [totalTiles-width]);
+        console.log('id > [totalTiles-width]'+ Number(id) > Number([totalTiles-width]));
     }
     
     //check left tile
@@ -210,28 +216,24 @@ function checkCompatibility(id, tile_id){
         adjacentTiles = true;
         if(currentRotation == 0 || currentRotation == 360){
             if(tiles[left_id].right == tileData[tile_id].left){
-                console.log('left compatible!');
             }else{
                 console.log('left uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 90){
             if(tiles[left_id].right == tileData[tile_id].bottom){
-                console.log('left compatible!');
             }else{
                 console.log('left uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 180){
             if(tiles[left_id].right == tileData[tile_id].right){
-                console.log('left compatible!');
             }else{
                 console.log('left uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 270){
             if(tiles[left_id].right == tileData[tile_id].top){
-                console.log('left compatible!');
             }else{
                 console.log('left uncompatible!');
                 abort = true;
@@ -251,28 +253,24 @@ function checkCompatibility(id, tile_id){
         adjacentTiles = true;
         if(currentRotation == 0 || currentRotation == 360){
             if(tiles[right_id].left == tileData[tile_id].right){
-                console.log('right compatible!');
             }else{
                 console.log('right uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 90){
             if(tiles[right_id].left == tileData[tile_id].top){
-                console.log('right compatible!');
             }else{
                 console.log('right uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 180){
             if(tiles[right_id].left == tileData[tile_id].left){
-                console.log('right compatible!');
             }else{
                 console.log('right uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 270){
             if(tiles[right_id].left == tileData[tile_id].bottom){
-                console.log('right compatible!');
             }else{
                 console.log('right uncompatible!');
                 abort = true;
@@ -291,28 +289,24 @@ function checkCompatibility(id, tile_id){
         adjacentTiles = true;
         if(currentRotation == 0 || currentRotation == 360){
             if(tiles[top_id].bottom == tileData[tile_id].top){
-                console.log('top compatible!');
             }else{
                 console.log('top uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 90){
             if(tiles[top_id].bottom == tileData[tile_id].left){
-                console.log('top compatible!');
             }else{
                 console.log('top uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 180){
             if(tiles[top_id].bottom == tileData[tile_id].bottom){
-                console.log('top compatible!');
             }else{
                 console.log('top uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 270){
             if(tiles[top_id].bottom == tileData[tile_id].right){
-                console.log('top compatible!');
             }else{
                 console.log('top uncompatible!');
                 abort = true;
@@ -331,28 +325,24 @@ function checkCompatibility(id, tile_id){
         adjacentTiles = true;
         if(currentRotation == 360 || currentRotation == 0){
             if(tiles[bottom_id].top == tileData[tile_id].bottom){
-                console.log('bottom compatible!');
             }else{
                 console.log('bottom uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 90){
             if(tiles[bottom_id].top == tileData[tile_id].right){
-                console.log('bottom compatible!');
             }else{
                 console.log('bottom uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 180){
             if(tiles[bottom_id].top == tileData[tile_id].top){
-                console.log('bottom compatible!');
             }else{
                 console.log('bottom uncompatible!');
                 abort = true;
             }
         }else if(currentRotation == 270){
             if(tiles[bottom_id].top == tileData[tile_id].left){
-                console.log('bottom compatible!');
             }else{
                 console.log('bottom uncompatible!');
                 abort = true;
@@ -360,6 +350,7 @@ function checkCompatibility(id, tile_id){
         }
     }else{
         console.log('dontCheckBottom == '+dontCheckBottom);
+        console.log(id);
     }
 
     if(adjacentTiles == false){

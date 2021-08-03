@@ -15,8 +15,8 @@
             <div id="zoom">
                 <script>
                     // height and width work best with odd numbers, due to the placement of the starting tile
-                    var height = 3;
-                    var width = 3;
+                    var height = 5;
+                    var width = 5;
                     for(i=0; i<height; i++){
                         document.write('<div class="block">');
                         for(a=0; a<width; a++){
