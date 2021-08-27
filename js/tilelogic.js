@@ -195,7 +195,7 @@ function checkCompatibility(id, tile_id){
         dontCheckLeft = true;
     }
     if([+id + +1] % width === 0){
-        dontCheckRight == true;
+        dontCheckRight = true;
     }
     if(Number(id) > Number([totalTiles-width])){
         dontCheckBottom = true;
